@@ -586,11 +586,24 @@
         document.getElementById('printDate').value = new Date().toISOString().split('T')[0];
 
         function generateAndPrintReport() {
-            generateReport();
-            setTimeout(() => {
-                window.print();
-            }, 100);
-        }
+    generateReport();
+    
+    // Preload the logo image before printing
+    const img = new Image();
+    img.onload = function() {
+        // Image is loaded, safe to print
+        setTimeout(() => {
+            window.print();
+        }, 200);
+    };
+    img.onerror = function() {
+        // Even if image fails, still print after delay
+        setTimeout(() => {
+            window.print();
+        }, 500);
+    };
+    img.src = "https://github.com/ClarityScore/report-generator/blob/main/logotalktalk.png?raw=true";
+}
 
         function generateReport() {
             // Get form values
