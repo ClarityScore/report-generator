@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TALK TALK ENGLISH Score Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(-45deg, #ef476f, #ffd166, #eae2b7, #118ab2);
+            background-size: 400% 400%;
+            background-attachment: fixed;
+            animation: gradientShift 10s ease infinite;
+            min-height: 100vh;
+            will-change: background-position;
+            transform: translateZ(0);
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .report-section {
+            display: none;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #444;
+            border-bottom: 2px solid #007acc;
+            padding-bottom: 5px;
+        }
+
+        /* Updated styles for colored heading boxes */
+        .report h3 {
+            background: #007acc;
+            color: white;
+            padding: 4px 8px;
+            margin: 15px 0 10px 0;
+            border: 1px solid #007acc;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* Special styling for Student Information heading - no colored box, grey line underneath */
+        .report h3.student-info-heading {
+            background: none;
+            color: #333;
+            padding: 0 8;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+        }
+        
+        /* Style for the TALK TALK ENGLISH portion */
+        .report h3.student-info-heading .brand-name {
+            font-family: "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 100;
+            font-size: 15px;
+        }
+        /* Remove boxes from specific h4 headings */
+        .report h4 {
+            color: #333;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 12px 0;
+            padding: 0;
+            background: none;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .score-input {
+            width: 80px !important;
+            display: inline-block;
+        }
+
+        .generate-btn {
+            background: #007acc;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            background: #005c99;
+        }
+
+        .report {
+            border: 1px solid #ccc;
+            padding: 20px;
+            background: white;
+            font-family: Helvetica, sans-serif;
+            font-size: 12px;
+            line-height: 1.4;
+            position: relative;
+            margin-top: 60px; /* Add this to move everything down */
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .report-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .scale-info {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .student-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            margin-left: 20px; /* Indent the student info content */
+        }
+
+        /* Logo styling */
+        .logo {
+            position: absolute;
+            top: -100px;
+            right: 20px;
+            width: 80px;
+            height: auto;
+        }
+
+        .scores-section {
+            margin-bottom: 30px;
+        }
+
+        .scores-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: stretch; /* Make all grid items same height */
+        }
+
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch; /* Change from center to stretch */
+            padding: 10px;
+            border-left: 4px solid #007acc;
+            background: #f9f9f9;
+            min-height: 80px; /* Set minimum height for consistency */
+        }
+
+        .score-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Distribute content evenly */
+        }
+
+        .score-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #007acc;
+            margin-left: 20px;
+            display: flex;
+            align-items: center; /* Center the score number vertically */
+            min-width: 30px; /* Ensure consistent width for score numbers */
+            justify-content: center;
+        }
+
+        .score-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px; /* Add consistent spacing */
+        }
+
+        .score-description {
+            font-size: 11px;
+            color: #666;
+            margin: 5px 0; /* Add consistent vertical spacing */
+            flex-grow: 1; /* Allow description to take available space */
+        }
+
+        .score-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin: 10px 0 0 0; /* Remove bottom margin, keep top margin */
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: #linear-gradient(to right, #ff4444, #ffaa00, #ffff00, #88ff88, #44ff44);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .custom-report-title {
+            font-family: 'Georgia', serif;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #dc3545;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #dc3545;
+        }
+
+        .writing-section {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .page-break {
+            page-break-before: always;
+            padding-top: 30px; /* Add this to create space at top of page 2 */
+        }
+
+        .writing-feedback {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            line-height: 1.8; /* Increase from default 1.4 for more spacing */
+            white-space: pre-wrap; /* This preserves line breaks from textarea input */
+        }
+
+        .criteria-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 10px;
+        }
+
+        .criteria-table th,
+        .criteria-table td {
+            border: 1px solid #ddd;
+            padding: 6px;
+            text-align: center;
+            vertical-align: top;
+            line-height: 1.3;
+        }
+
+        .criteria-table th {
+            background: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .criteria-table .criteria-name {
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .print-btn:hover {
+            background: #218838;
+        }
+
+        @media print {
+            @page {
+                margin: 0.5in;
+
+                /* Hide browser headers and footers */
+                @top-left {
+                    content: "";
+                }
+
+                @top-center {
+                    content: "";
+                }
+
+                @top-right {
+                    content: "";
+                }
+
+                @bottom-left {
+                    content: "";
+                }
+
+                @bottom-center {
+                    content: "";
+                }
+
+                @bottom-right {
+                    content: "";
+                }
+            }
+
+            .print-btn {
+                display: none !important;
+            }
+
+            body {
+                background: white;
+            }
+
+            .container {
+                display: block;
+            }
+
+            .form-section {
+                display: none;
+            }
+
+            #reportOutput {
+                display: block !important;
+            }
+
+            .report {
+                border: none !important;
+                box-shadow: none !important;
+            }
+
+            /* Force browsers to print colors and backgrounds */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .score-bar {
+                background: #e0e0e0 !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            .score-fill {
+                background: linear-gradient(to right, #ff4444, #ffaa00, #ffff00, #88ff88, #44ff44) !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+
+            .score-item {
+                border-left: 4px solid #007acc !important;
+                background: #f9f9f9 !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .score-value {
+                color: #007acc !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            .scores-section {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .writing-section {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .criteria-table {
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+            }
+
+            .report {
+                page-break-after: avoid !important;
+            }
+
+            /* Prevent orphaned content on new pages */
+            .writing-section {
+                orphans: 3;
+                widows: 3;
+            }
+
+            /* Ensure colored heading boxes print correctly */
+            .report h3 {
+                background: #007acc !important;
+                color: white !important;
+                border: 1px solid #007acc !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            /* Special print styling for Student Information heading */
+            .report h3.student-info-heading {
+                background: none !important;
+                color: #333 !important;
+                border: none !important;
+                border-bottom: 1px solid #ccc !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .report h4 {
+                background: none !important;
+                color: #333 !important;
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+
+            .logo {
+                -webkit-print-color-adjust: exact !important;
+                color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <h1>TALK TALK ENGLISH Score Report</h1>
+        <div class="form-section">
+            <h2>Student Information</h2>
+            <form id="reportForm">
+                <div class="form-group">
+                    <label for="studentName">Student Name:</label>
+                    <input type="text" id="studentName" value="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tutor">Tutor:</label>
+                    <input type="text" id="tutor" value="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course:</label>
+                    <input type="text" id="course" value="" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="printDate">Print Date:</label>
+                    <input type="date" id="printDate" required>
+                </div>
+
+                <h2>Scores</h2>
+
+                <div class="form-group">
+                    <label for="homeworkScore">Homework Assignment Score:</label>
+                    <input type="number" id="homeworkScore" class="score-input" min="1" max="5" step="0.5" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="vocabScore">Vocabulary Quiz Score:</label>
+                    <input type="number" id="vocabScore" class="score-input" min="1" max="5" step="0.5" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="examScore">Final Exam Score:</label>
+                    <input type="number" id="examScore" class="score-input" min="1" max="5" step="0.5" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="writingScore">Writing Score:</label>
+                    <input type="number" id="writingScore" class="score-input" min="1" max="5" step="0.5" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+            </br>
+                <div class="form-group">
+                    <label for="additionalComments">Additional Comments:</label>
+                    <textarea id="additionalComments" placeholder="Enter any additional comments..."></textarea>
+                </div>
+
+                <h2>Writing Assessment</h2>
+
+                <div class="form-group">
+                    <label for="grammarScore">Grammar Score:</label>
+                    <input type="number" id="grammarScore" class="score-input" min="1" max="5" step="1" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="expressionScore">Expression & Style Score:</label>
+                    <input type="number" id="expressionScore" class="score-input" min="1" max="5" step="1" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="contentScore">Content Score:</label>
+                    <input type="number" id="contentScore" class="score-input" min="1" max="5" step="1" value=""
+                        required>
+                    <span>/5</span>
+                </div>
+            </br>  
+                <div class="form-group">
+                    <label for="correctedText">Corrected Version:</label>
+                    <textarea id="correctedText"
+                        placeholder="Enter the corrected version of the student's writing..."></textarea>
+                </div>
+    
+                <button type="button" class="generate-btn" onclick="generateAndPrintReport()">Generate & Print
+                    Report</button>
+            </form>
+        </div>
+
+        <!-- Hidden report section for printing -->
+        <div id="reportOutput" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Set today's date as default
+        document.getElementById('printDate').value = new Date().toISOString().split('T')[0];
+
+        function generateAndPrintReport() {
+            generateReport();
+            setTimeout(() => {
+                window.print();
+            }, 100);
+        }
+
+        function generateReport() {
+            // Get form values
+            const studentName = document.getElementById('studentName').value;
+            const tutor = document.getElementById('tutor').value;
+            const course = document.getElementById('course').value;
+            const printDate = new Date(document.getElementById('printDate').value).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const homeworkScore = parseFloat(document.getElementById('homeworkScore').value);
+            const vocabScore = parseFloat(document.getElementById('vocabScore').value);
+            const examScore = parseFloat(document.getElementById('examScore').value);
+            const writingScore = parseFloat(document.getElementById('writingScore').value);
+
+            const correctedText = document.getElementById('correctedText').value;
+            const grammarScore = parseInt(document.getElementById('grammarScore').value);
+            const expressionScore = parseInt(document.getElementById('expressionScore').value);
+            const contentScore = parseInt(document.getElementById('contentScore').value);
+            const additionalComments = document.getElementById('additionalComments').value;
+
+            const writingAverage = ((grammarScore + expressionScore + contentScore) / 3).toFixed(1);
+
+            // Generate report HTML
+            const reportHTML = `
+                <div class="report">
+                    <img class="logo" src="https://raw.githubusercontent.com/keunh09/repository/refs/heads/main/logotalktalk.png" alt="Logo" style="width: 650px; height: auto;">
+
+                    <h3 class="student-info-heading"><span class="brand-name">TALK TALK ENGLISH ⎹</span> Score Report</h3>
+                    <div class="student-info">
+                        <div><strong>Student Name:</strong> ${studentName}</div>
+                        <div><strong>Print date:</strong> ${printDate}</div>
+                        <div><strong>Tutor:</strong> ${tutor}</div>
+                        <div><strong>Course:</strong> ${course}</div>
+                    </div>
+
+                    <div class="scores-section">
+                        <h3>Scores</h3>
+
+                        <div class="scores-grid">
+                            <div class="score-item">
+                                <div class="score-details">
+                                    <div class="score-name">Homework Assignment</div>
+                                    <div class="score-description">• Submits the given homework assignments on time.</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: ${(homeworkScore / 5) * 100}%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-value">${homeworkScore}</div>
+                            </div>
+
+                            <div class="score-item">
+                                <div class="score-details">
+                                    <div class="score-name">Vocabulary Quiz</div>
+                                    <div class="score-description">• Takes part in the weekly quiz.<br>• Has a good understanding of the key vocabulary words.</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: ${(vocabScore / 5) * 100}%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-value">${vocabScore}</div>
+                            </div>
+
+                            <div class="score-item">
+                                <div class="score-details">
+                                    <div class="score-name">Final Exam</div>
+                                    <div class="score-description">• Achieves a good score on the final exam.</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: ${(examScore / 5) * 100}%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-value">${examScore}</div>
+                            </div>
+
+                            <div class="score-item">
+                                <div class="score-details">
+                                    <div class="score-name">Writing</div>
+                                    <div class="score-description">• Shows good writing skills.</div>
+                                    <div class="score-bar">
+                                        <div class="score-fill" style="width: ${(writingScore / 5) * 100}%"></div>
+                                    </div>
+                                </div>
+                                <div class="score-value">${writingScore}</div>
+                            </div>
+                        </div>
+                        <div class="scale-info">*scale: 1 = Unsatisfactory 2 = Needs Improvement 3 = Meets Requirements 4 = Good 5 = Exceptional</div>
+                    </div>
+                    <div class="writing-section">
+                        <h3>Additional Comments</h3>
+                        <div class="writing-feedback">${additionalComments || 'No additional comments provided.'}</div>
+                    </div>
+
+                    <div class="writing-section page-break">
+                        <h3>Writing Feedback</h3>
+
+                        <h4>· Corrected version of the student's answer</h4>
+                        <div class="writing-feedback">${correctedText || 'No corrected version provided.'}</div>
+
+                        <h4>· Evaluation</h4>
+                        <table class="criteria-table">
+                            <thead>
+                                <tr>
+                                    <th>Criteria</th>
+                                    <th>Exceptional (5)</th>
+                                    <th>Strong (4)</th>
+                                    <th>Satisfactory (3)</th>
+                                    <th>Emerging (2)</th>
+                                    <th>Poor (1)</th>
+                                    <th>Score</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="criteria-name">Grammar</td>
+                                    <td>Flawless grammar, punctuation, and spelling; writing is polished and professional.</td>
+                                    <td>Few minor errors that do not affect readability or meaning.</td>
+                                    <td>Some errors are present but rarely affect understanding.</td>
+                                    <td>Frequent errors that occasionally confuse meaning.</td>
+                                    <td>Consistent grammar or spelling issues that make the text difficult to understand.</td>
+                                    <td><strong>${grammarScore}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="criteria-name">Expression & Style</td>
+                                    <td>Sophisticated and engaging writing; excellent sentence variety and word choice.</td>
+                                    <td>Clear and effective expression with some variety in style and vocabulary.</td>
+                                    <td>Ideas are communicated clearly; style is basic but readable.</td>
+                                    <td>Style is uneven; word choice or sentence structure is awkward.</td>
+                                    <td>Writing is unclear, flat, or difficult to follow; lacks control and precision.</td>
+                                    <td><strong>${expressionScore}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td class="criteria-name">Content</td>
+                                    <td>Insightful, well-developed ideas with rich detail and strong relevance to the topic.</td>
+                                    <td>Good development and depth; ideas are relevant and mostly clear.</td>
+                                    <td>Limited ideas or vague content; relevance may be inconsistent.</td>
+                                    <td>Ideas are appropriate but may lack depth or originality.</td>
+                                    <td>Off-topic, underdeveloped, or missing important ideas.</td>
+                                    <td><strong>${contentScore}</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="text-align: right; margin-top: 20px;">
+                            <strong>Average: ${writingAverage}</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('reportOutput').innerHTML = reportHTML;
+        }
+
+        function printReport() {
+            window.print();
+        }
+    </script>
+</body>
+
+</html>
