@@ -583,7 +583,11 @@
 
     <script>
         // Set today's date as default
-        document.getElementById('printDate').value = new Date().toISOString().split('T')[0];
+document.getElementById('printDate').value = new Date().toISOString().split('T')[0];
+
+// Preload the logo image when page loads
+const logoImg = new Image();
+logoImg.src = "https://github.com/ClarityScore/report-generator/blob/main/logotalktalk.png?raw=true";
 
         function generateAndPrintReport() {
     generateReport();
